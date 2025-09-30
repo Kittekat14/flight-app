@@ -8,10 +8,11 @@ import {
   Router,
   RouterOutlet,
 } from '@angular/router';
+import { AuthService } from '@flight-demo/util-auth';
 import { filter, map, merge, Observable } from 'rxjs';
-import { SidebarComponent } from './shell/sidebar/sidebar.component';
-import { NavbarComponent } from './shell/navbar/navbar.component';
 import { ConfigService } from './domains/shared/util-config';
+import { NavbarComponent } from './shell/navbar/navbar.component';
+import { SidebarComponent } from './shell/sidebar/sidebar.component';
 
 @Component({
   standalone: true,
@@ -24,9 +25,11 @@ export class AppComponent {
   title = 'Hello World!';
   configService = inject(ConfigService);
   router = inject(Router);
+  private readonly authService = inject(AuthService);
   loading$: Observable<boolean>;
 
   constructor() {
+    this.authService.login('Max Mustermann');
     // TODO: In a later lab, we will assure that
     //  loading did happen _before_ we use the config!
     this.configService.loadConfig();
