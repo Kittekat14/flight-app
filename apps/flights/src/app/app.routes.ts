@@ -1,12 +1,12 @@
+import { loadRemoteModule } from '@angular-architects/native-federation';
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { AboutComponent } from './shell/about/about.component';
-import { HomeComponent } from './shell/home/home.component';
-import { BasketComponent } from './shell/basket/basket.component';
-import { NotFoundComponent } from './shell/not-found/not-found.component';
-import { ConfigService } from './domains/shared/util-config';
 import { FeatureManageComponent } from './domains/checkin/feature-manage/feature-manage.component';
-import { loadRemoteModule } from '@angular-architects/native-federation';
+import { ConfigService } from './domains/shared/util-config';
+import { AboutComponent } from './shell/about/about.component';
+import { BasketComponent } from './shell/basket/basket.component';
+import { HomeComponent } from './shell/home/home.component';
+import { NotFoundComponent } from './shell/not-found/not-found.component';
 
 export const APP_ROUTES: Routes = [
   {
@@ -25,7 +25,7 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'miles',
-    loadComponent: () => loadRemoteModule('miles', './Component'),
+    loadChildren: () => loadRemoteModule('miles', './Routes'),
   },
   {
     path: '',
