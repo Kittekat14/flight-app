@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { debounceSignal } from '@demo/shared/util-common';
 import { BookingStore } from './booking.store';
 
 @Component({
@@ -23,8 +24,10 @@ export class FlightBookingComponent {
   filter = computed(() => ({ from: this.from(), to: this.to() }));
   // but why not? filter = computed(() => this.bookingStore.filter());
 
+  debouncedFilter = debounceSignal(this.filter, 300);
+
   constructor() {
-    this.search();
+    this.bookingStore.updateFilter(this.debouncedFilter);
   }
 
   search(): void {

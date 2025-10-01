@@ -10,6 +10,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { Criteria, FlightService } from '../data';
+import { delayFirstFlight } from './delay-first-flight';
 
 export const BookingStore = signalStore(
   { providedIn: 'root' },
@@ -31,6 +32,14 @@ export const BookingStore = signalStore(
   withResource((store) => ({
     flights: store._flightService.createResource(store.filter),
   })),
+  withComputed((store) => ({
+    selected: computed(() =>
+      store.flightsValue().filter((f) => store.basket()[f.id])
+    ),
+    flightsWithDelay: computed(() =>
+      delayFirstFlight(store.flightsValue(), store.delayInMin())
+    ),
+  })),
   withMethods((store) => ({
     updateFilter: signalMethod((filter: Criteria) => {
       patchState(store, filter);
@@ -48,6 +57,9 @@ export const BookingStore = signalStore(
         delayInMin: state.delayInMin + 15,
       }));
     },
+    reload: signalMethod(() => {
+      store._flightsReload();
+    }),
   })),
   withDevtools('booking')
 );
