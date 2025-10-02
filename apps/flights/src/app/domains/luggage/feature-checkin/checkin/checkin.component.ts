@@ -1,8 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 
-import { Luggage, LuggageService } from '@demo/luggage/data';
 import { LuggageCardComponent } from '@demo/luggage/ui-common';
+import { Dispatcher } from '@ngrx/signals/events';
+import { checkinEvents } from './checkin.events';
+import { LuggageStore } from './luggage.store';
 
 @Component({
   selector: 'app-checkin',
@@ -12,12 +14,17 @@ import { LuggageCardComponent } from '@demo/luggage/ui-common';
   styleUrls: ['./checkin.component.css'],
 })
 export class CheckinComponent implements OnInit {
-  luggageService = inject(LuggageService);
-  luggage: Luggage[] = [];
+  //luggageService = inject(LuggageService);
+  store = inject(LuggageStore);
+  dispatcher = inject(Dispatcher);
+
+  luggage = this.store.luggage;
 
   ngOnInit(): void {
-    this.luggageService.load().subscribe((luggage) => {
-      this.luggage = luggage;
-    });
+    // this.luggageService.load().subscribe((luggage) => {
+    //   this.luggage = luggage;
+    // });
+
+    this.dispatcher.dispatch(checkinEvents.loadLuggage({ passengerId: 17 }));
   }
 }
